@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Genshin catalog</title>
+</head>
+<body>
+    <header>
+        <a class="title" href="/">
+            <h1>Genshin Catalog</h1>
+        </a>
+    </header>
+    <main>
+        <section class="content margin-top-d">
+            <form action="POST" class="newItem_form pad-d rounded-5">
+                <input type="text" name="name" id="itemName" placeholder="Name">
+                <select name="rarity" id="itemRarity">
+                    <option value="" hidden>Please select a rarity</option>
+                    <option value="5">5 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="3">3 Star</option>
+                </select>
+                <select name="region" id="characterRegion">
+                    <option value="" hidden>Please select a region</option>
+                    <option value="5">Monstadt</option>
+                    <option value="4">Inazuma</option>
+                    <option value="3">Liyue</option>
+                </select>
+                <select name="element" id="characterElement">
+                    <option value="" hidden>Please select an element</option>
+                    <option value="anemo">Anemo</option>
+                    <option value="geo">Geo</option>
+                    <option value="hydro">Hydro</option>
+                    <option value="pyro">Pyro</option>
+                    <option value="cryo">Cryo</option>
+                    <option value="dendro">Dendro</option>
+                </select>
+                <textarea name="description" id="itemDescription" cols="30" rows="10" placeholder="Description"></textarea>
+
+                <input type="text" name="profileImg" id="profileImg" placeholder="Thumbnail image link (example: https://paimon.moe/images/characters/albedo.png)">
+                <input type="text" name="detailImg" id="detailImg" placeholder="Detailed image link (example: https://paimon.moe/images/characters/full/albedo.png)">
+
+                <button type="submit" class="addItem">Create Item</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

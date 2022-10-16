@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Genshin catalog</title>
+</head>
+<body>
+    <header>
+        <a class="title" href="/">
+            <h1>Genshin Catalog</h1>
+        </a>
+    </header>
+    <main>
+        <div class="categories">
+            <ul class="category_list">
+                <li class="category active"><a href="#"><img src="/template/imgs/icons/cat_characters.png" alt="characters"></a></li>
+                <li class="category"><a href="#"><img src="/template/imgs/icons/cat_weaps.png" alt="weapons"></a></li>
+                <li class="category"><a href="#"><img src="/template/imgs/icons/cat_artifacts.png" alt="artifacts"></a></li>
+            </ul>
+        </div>
+
+        <section class="content">
+            <form class="filter rounded-5" method="POST">
+                <h3>Filter</h3>
+                <label for="rarity">Rarity :</label>
+                <select name="rarity" id="rarity">
+                    <option value="" hidden>Please select a rarity</option>
+                    <option value="all">All</option>
+                    <option value="5">5 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="3">3 Star</option>
+                </select>
+                <label for="element">Element :</label>
+                <select name="element" id="element">
+                    <option value="" hidden>Please select an element</option>
+                    <option value="all">All</option>
+                    <option value="anemo">Anemo</option>
+                    <option value="geo">Geo</option>
+                    <option value="hydro">Hydro</option>
+                    <option value="pyro">Pyro</option>
+                    <option value="cryo">Cryo</option>
+                    <option value="dendro">Dendro</option>
+                </select>
+                <label for="weapon">Weapon :</label>
+                <select name="weapon" id="weapon_type">
+                    <option value="" hidden>Please select a weapon type</option>
+                    <option value="all">All</option>
+                    <option value="swrd">Sword</option>
+                    <option value="bow">Bow</option>
+                    <option value="polearm">Polearm</option>
+                    <option value="catalyst">Catalyst</option>
+                </select>
+
+                <button type="submit">Search</button>
+            </form>
+            <section class="item_container rounded-5 pad-d">
+                <a href="" class="card rounded-5">
+                    <div class="card_img rounded-5-top star_5">
+                        <img src="https://paimon.moe/images/characters/albedo.png" alt="Albedo">
+                    </div>
+                    <p class="card_text rounded-5-bottom pad-s">Name</p>
+                </a>
+
+                <a href="" class="card rounded-5">
+                    <div class="card_img rounded-5-top star_5">
+                        <img src="https://paimon.moe/images/characters/albedo.png" alt="Albedo">
+                    </div>
+                    <p class="card_text rounded-5-bottom pad-s">Name</p>
+                </a>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
