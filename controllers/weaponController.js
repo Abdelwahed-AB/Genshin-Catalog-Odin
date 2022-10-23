@@ -31,8 +31,17 @@ exports.weapon_list = (req, res, next)=>{
     });
 };
 
-exports.weapon_detail = ()=>{
-    return "Not yet implemented.";
+exports.weapon_detail = (req, res, next)=>{
+    Weapon.findById(req.params.id).populate().exec((err, weapon)=>{
+        if(err) return next(err);
+        WeaponType.findById(weapon.weapon_type).exec((err, weapon_type)=>{
+            if(err) return next(err);
+            res.render("weapon_detail", {
+                weapon,
+                weapon_type,
+            });
+        });
+    });
 };
 
 exports.weapon_create_get = ()=>{

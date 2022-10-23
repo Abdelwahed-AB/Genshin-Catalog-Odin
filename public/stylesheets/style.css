@@ -134,6 +134,14 @@ header{
     display: flex;
 }
 
+.item_detail>.img{
+    flex-basis: 45%;
+    flex-shrink: 0;
+}
+.item_detail>.img>img{
+    width: 100%;
+}
+
 .filter > h3{
     grid-area: title;
     text-align: center;
@@ -247,6 +255,9 @@ header{
     margin-top: auto;
     width: fit-content;
     align-self: center;
+
+    display: flex;
+    gap: .5rem;
 }
 .info_controls > a{
     text-decoration: none;

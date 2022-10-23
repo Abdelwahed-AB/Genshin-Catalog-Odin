@@ -8,4 +8,8 @@ const ArtifactSchema = new Schema({
     img: {type: String, required: true},
 });
 
+ArtifactSchema.virtual("url").get(function(){
+    return '/artifact/'+this._id;
+});
+
 module.exports = mongoose.model("Artifact", ArtifactSchema);

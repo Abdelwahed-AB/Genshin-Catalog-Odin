@@ -50,6 +50,7 @@ var createRegion = (name, cb)=>{
         }
 
         console.log("New region: "+ region);
+        regions.push(region);
         cb(null, region);
     });
 };
@@ -63,6 +64,7 @@ var createArtifact = (name, description, rarity, img, cb)=>{
             return
         }
         console.log('New artifact: '+ artifact);
+        artifacts.push(artifact);
         cb(null, artifact);
     });
 };
@@ -80,8 +82,8 @@ var createWeapon = (name, base_attack, second_stat, passive, description, rarity
     })
 };
 
-var createCharacter = (name, rarity, element, region, weapon_type, img_small, img_full, cb)=>{
-    let character = new Character({name, rarity, element, region, weapon_type, img_small, img_full});
+var createCharacter = (name, rarity, element, region, weapon_type, description, img_small, img_full, cb)=>{
+    let character = new Character({name, rarity, element, region, weapon_type, description, img_small, img_full});
 
     character.save((err)=>{
         if(err){
@@ -176,6 +178,11 @@ function createCharacters(cb){
                 "geo",
                 regions[0],
                 weaponTypes[0],
+                `Having gained fame for his alchemical talents, Albedo is a reclusive person, spending most of his time in Dragonspine. He dislikes most social interactions, finding it stressful, and thus rarely travels to the city of Mondstadt unless it is to meet up with his fellow alchemists or other acquaintances. He prefers being around children, especially Klee, seeing her as a younger sister. Klee in turn sees him as an older brother figure.
+                
+                Fueled by the feeling of enlightenment, he researches about the things that pique his interest, and once the feeling is gone, either by uncovering its truth or otherwise, he loses all interest, left with a bittersweet sensation in his mind. Along with his alchemical genius, Albedo is also a respectable artist. Having initially learned the talent as a way to help with his experiments, it is now a form of relaxation for him. He is Xingqiu's illustrator and regards him as a good author.
+                
+                As much of a positive demeanor he gives off, the people of Mondstadt do not know anything about his personal life and he is particularly secretive about it towards them. To the Traveler, he does not mind sharing most of his secrets with them due to feeling a kinship of sorts as they are both not of Teyvat, him being an artificial lifeform and the Traveler a visitor from afar. He considers himself to be dangerous due to his knowledge on the Art of Khemia, something which Venti and Dainsleif are well too aware of.`,
                 "https://paimon.moe/images/characters/albedo.png",
                 "https://paimon.moe/images/characters/full/albedo.png",
                 callback
@@ -187,7 +194,10 @@ function createCharacters(cb){
                 4,
                 "pyro",
                 regions[0],
-                weaponTypes[2],
+                weaponTypes[2], 
+                `Outrider for the Knights of Favonius, Amber is described as "a model for justice" by Kaeya. She fulfills her duties as an Outrider diligently, even though she's the only one left in the said platoon. She abides by the rules, except for when using her wind glider, having her gliding license revoked numerous times.
+                
+                She has an outgoing personality, as one might find her talking to strangers as if they're acquaintances. She is passionate in everything she does, may it be helping the citizens or purging hilichurls. She wishes to be as great as her grandfather, a once loyal defender of Mondstadt. Even after he disappeared, she still defends Mondstadt in his place.`,
                 "https://paimon.moe/images/characters/amber.png",
                 "https://paimon.moe/images/characters/full/amber.png",
                 callback
@@ -200,6 +210,9 @@ function createCharacters(cb){
                 "electro",
                 regions[3],
                 weaponTypes[1],
+                `Cyno is a knowledgeable scholar from Sumeru Akademiya who prefers keeping things clear and concise. He comes across as curt and stoic in his Manga appearances, his first words being a stern "Hands off." when Amber was about to touch Lisa's potions. However, he did so to prevent her from accidentally turning herself into a pig, displaying his knowledge in potions and his more considerate side.
+                
+                Despite his young age and relative obscurity as a researcher, Cyno holds the position of General Mahamatra in the Akademiya and takes his position seriously. Cyno is extremely dedicated to upholding the Akademiya's rules and punishing any transgressions, to such an extent that even the sages of the Akademiya (ostensibly his superiors) are wary of him. Notoriously, Cyno will relentlessly pursue any individuals that try to flee his judgment, even across the desert - a trait that, in combination with his prowess as a hunter and warrior, makes escaping from Cyno nigh impossible. Due to this, Cyno's name is infamous within Sumeru and many scholars fear the prospect of ever meeting him, despite the fact that he only handles cases of significant interest.`,
                 "https://paimon.moe/images/characters/cyno.png",
                 "https://paimon.moe/images/characters/full/cyno.png",
                 callback

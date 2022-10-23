@@ -19,8 +19,14 @@ exports.artifact_list = (req, res, next)=>{
     });
 };
 
-exports.artifact_detail = ()=>{
-    return "Not yet implemented.";
+exports.artifact_detail = (req, res, next)=>{
+    Artifact.findById(req.params.id).exec((err, artifact)=>{
+        if(err) return next(err);
+
+        res.render("artifact_detail", {
+            artifact
+        });
+    });
 };
 
 exports.artifact_create_get = ()=>{

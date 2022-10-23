@@ -12,4 +12,8 @@ const WeaponSchema = new Schema({
     img: {type: String, required: true},
 });
 
+WeaponSchema.virtual("url").get(function(){
+    return '/weapon/'+this._id;
+})
+
 module.exports = mongoose.model("Weapon", WeaponSchema);

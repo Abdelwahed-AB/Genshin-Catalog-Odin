@@ -67,19 +67,19 @@ block content
         p.card_text.rounded-5-bottom.pad-s New
       if character_list 
         each character in character_list 
-          a.card.rounded-5(href='#')
+          a.card.rounded-5(href=character.url)
             .card_img.rounded-5-top(class={star_4: character.rarity == 4, star_5: character.rarity == 5})
               img(src=character.img_small alt=character.name)
             p.card_text.rounded-5-bottom.pad-s=character.name
       if weapon_list 
         each weapon in weapon_list 
-          a.card.rounded-5(href='#')
+          a.card.rounded-5(href=weapon.url)
             .card_img.rounded-5-top.star_1(class={star_1: weapon.rarity == 1, star_2: weapon.rarity == 2, star_3: weapon.rarity == 3, star_4: weapon.rarity == 4, star_5: weapon.rarity == 5})
               img(src=weapon.img alt=weapon.name)
             p.card_text.rounded-5-bottom.pad-s=weapon.name
       if artifact_list 
         each artifact in artifact_list 
-          a.card.rounded-5(href='#')
+          a.card.rounded-5(href=artifact.url)
             .card_img.rounded-5-top(class={star_1: artifact.rarity == 1, star_2: artifact.rarity == 2, star_3: artifact.rarity == 3, star_4: artifact.rarity == 4, star_5: artifact.rarity == 5})
               img(src=artifact.img alt=artifact.name)
             p.card_text.rounded-5-bottom.pad-s=artifact.name

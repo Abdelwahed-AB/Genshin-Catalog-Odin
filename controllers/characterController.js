@@ -1,5 +1,6 @@
 const Character = require("../models/character");
 const WeaponType = require("../models/weaponType");
+const Region = require("../models/region");
 const async = require("async");
 
 exports.character_list = (req, res, next)=>{
@@ -32,8 +33,27 @@ exports.character_list = (req, res, next)=>{
     });
 };
 
-exports.character_detail = ()=>{
-    return "NOT YET IMPLEMENTED.";
+exports.character_detail = (req, res, next)=>{
+
+    Character.findById(req.params.id).exec((err, character)=>{
+        if(err) return next(err);
+        async.parallel({
+            weapon_type(cb){
+                WeaponType.findById(character.weapon_type).exec(cb);
+            },
+            region(cb){
+                Region.findById(character.region).exec(cb);
+            }
+        }, (err, results)=>{
+            if(err) return next(err);
+
+            res.render("character_detail", {
+                character: character,
+                weapon_type: results.weapon_type,
+                region: results.region,
+            });
+        });
+    });
 };
 
 exports.character_create_get = ()=>{
