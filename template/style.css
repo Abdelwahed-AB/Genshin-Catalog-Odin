@@ -177,6 +177,19 @@ header{
 .createItem > svg{
     width: 50%;
 }
+.star_1{
+    color: rgba(82, 134, 164,1);
+    background: radial-gradient(circle, rgb(132, 130, 128) 0%, rgba(125, 123, 121, 1) 100%);
+    width: 100%;
+}
+.star_2{
+    background: radial-gradient(circle, rgb(98, 170, 127) 0%, rgba(89, 154, 115, 1) 100%);
+    width: 100%;
+}
+.star_3{
+    background: radial-gradient(circle, rgb(93, 151, 185) 0%, rgba(82, 134, 164,1) 100%);
+    width: 100%;
+}
 .star_4{
     background: radial-gradient(circle, rgba(255,240,219,1) 0%, rgba(210,143,214,1) 100%);
     width: 100%;

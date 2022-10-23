@@ -1,0 +1,86 @@
+extends layout 
+
+mixin form_cond()
+  if character_list !== undefined 
+    form.filter.rounded-5(method='GET' action="/characters")
+      block 
+  else if weapon_list !== undefined 
+    form.filter.rounded-5(method='GET' action="/weapons")
+      block 
+  else if artifact_list !== undefined 
+    form.filter.rounded-5(method='GET' action="/artifacts")
+      block
+
+
+block content 
+  .categories
+    ul.category_list
+      li.category(class={active: character_list!== undefined})
+        a(href='/characters')
+          img(src='/images/icons/cat_characters.png' alt='characters')
+      li.category(class={active: weapon_list!== undefined})
+        a(href='/weapons')
+          img(src='/images/icons/cat_weaps.png' alt='weapons')
+      li.category(class={active: artifact_list!== undefined})
+        a(href='/artifacts')
+          img(src='/images/icons/cat_artifacts.png' alt='artifacts')
+  section.content
+    +form_cond()
+      h3 Filter
+      label(for='rarity') Rarity :
+      select#rarity(name='rarity')
+        option(value='' hidden='' selected=(qO.rarity === undefined?'selected':false)) Please select a rarity
+        option(value='0') All
+        option(value='5' selected=(qO.rarity == 5?'selected':false)) 5 Star
+        option(value='4' selected=(qO.rarity == 4?'selected':false)) 4 Star
+        if !character_list
+          option(value='3' selected=(qO.rarity == 3?'selected':false)) 3 Star
+          option(value='2' selected=(qO.rarity == 2?'selected':false)) 2 Star
+          option(value='1' selected=(qO.rarity == 1?'selected':false)) 1 Star
+      if character_list
+        label(for='element') Element :
+        select#element(name='element')
+          option(value='' hidden='' selected=(qO.element == undefined?'selected':false)) Please select an element
+          option(value='') All
+          option(value='anemo' selected=(qO.element == 'anemo'?'selected':false)) Anemo
+          option(value='electro' selected=(qO.element == 'electro'?'selected':false)) Electro
+          option(value='geo' selected=(qO.element == 'geo'?'selected':false)) Geo
+          option(value='hydro' selected=(qO.element == 'hydro'?'selected':false)) Hydro
+          option(value='pyro' selected=(qO.element == 'pyro'?'selected':false)) Pyro
+          option(value='cryo' selected=(qO.element == 'cryo'?'selected':false)) Cryo
+          option(value='dendro' selected=(qO.element == 'dendro'?'selected':false)) Dendro
+      if character_list || weapon_list
+        label(for='weapon') Weapon :
+        select#weapon_type(name='weapon')
+          option(value='' hidden='' selected=(qO.weapon_type == undefined?'selected':false)) Please select a weapon type
+          option(value='') All
+          if weapon_types 
+            each weap_type in weapon_types
+              option(value=weap_type._id selected=(qO.weapon_type == weap_type._id.toString()?'selected':false))=weap_type.name
+      button.rounded-5(type='submit') Search
+    section.item_container.rounded-5.pad-d
+      a.card.rounded-5(href='')
+        .card_img.rounded-5-top.createItem
+          svg(xmlns='http://www.w3.org/2000/svg' viewbox='0 0 448 512')
+            // ! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc.
+            path(d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z')
+        p.card_text.rounded-5-bottom.pad-s New
+      if character_list 
+        each character in character_list 
+          a.card.rounded-5(href='#')
+            .card_img.rounded-5-top(class={star_4: character.rarity == 4, star_5: character.rarity == 5})
+              img(src=character.img_small alt=character.name)
+            p.card_text.rounded-5-bottom.pad-s=character.name
+      if weapon_list 
+        each weapon in weapon_list 
+          a.card.rounded-5(href='#')
+            .card_img.rounded-5-top.star_1(class={star_1: weapon.rarity == 1, star_2: weapon.rarity == 2, star_3: weapon.rarity == 3, star_4: weapon.rarity == 4, star_5: weapon.rarity == 5})
+              img(src=weapon.img alt=weapon.name)
+            p.card_text.rounded-5-bottom.pad-s=weapon.name
+      if artifact_list 
+        each artifact in artifact_list 
+          a.card.rounded-5(href='#')
+            .card_img.rounded-5-top(class={star_1: artifact.rarity == 1, star_2: artifact.rarity == 2, star_3: artifact.rarity == 3, star_4: artifact.rarity == 4, star_5: artifact.rarity == 5})
+              img(src=artifact.img alt=artifact.name)
+            p.card_text.rounded-5-bottom.pad-s=artifact.name
+            

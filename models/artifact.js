@@ -5,6 +5,7 @@ const ArtifactSchema = new Schema({
     name: {type: String, required: true, maxLenght: 100},
     description: {type: String, required: true},
     rarity: {type: Number, required: true, min: 1, max: 5},
+    img: {type: String, required: true},
 });
 
 module.exports = mongoose.model("Artifact", ArtifactSchema);
