@@ -8,15 +8,15 @@ block content
         option(value='' hidden='') Please select a rarity
         option(value='5' selected=(character.rarity === '5'? 'selected':false)) 5 Star
         option(value='4' selected=(character.rarity === '4'? 'selected':false)) 4 Star
-      select#characterRegion(name='weapon_type')
+      select(name='weapon_type')
         option(value='' hidden='') Please select a weapon
         each weap in weapon_types
           option(value=weap._id selected=( character.weapon_type === weap._id.toString()? 'selected':false))=weap.name
-      select#characterRegion(name='region')
+      select(name='region')
         option(value='' hidden='') Please select a region
         each region in region_list 
           option(value=region._id selected=( character.region === region._id.toString()? 'selected':false))=region.name
-      select#characterElement(name='element')
+      select(name='element')
         option(value='' hidden='') Please select an element
         option(value='anemo' selected=(character.element == "anemo"? 'selected':false)) Anemo
         option(value='geo' selected=(character.element == "geo"? 'selected':false)) Geo

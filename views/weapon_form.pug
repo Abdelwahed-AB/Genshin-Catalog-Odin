@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  section.content.margin-top-d
+    form.newItem_form.pad-d.rounded-5(action='/weapon/create' method="POST")
+      input#itemName(type='text' name='name' placeholder='Name' value=(weapon === undefined? "": weapon.name))
+      input(type='number' name='base_attack' placeholder='Base attack' value=(weapon === undefined? "": weapon.base_attack))
+      input#itemName(type='text' name='second_stat' placeholder='Secondary stat' value=(weapon === undefined? "": weapon.second_stat))
+      select#itemRarity(name='rarity')
+        option(value='' hidden='') Please select a rarity
+        option(value='5' selected=(weapon.rarity === '5'? 'selected':false)) 5 Star
+        option(value='4' selected=(weapon.rarity === '4'? 'selected':false)) 4 Star
+        option(value='3' selected=(weapon.rarity === '3'? 'selected':false)) 3 Star
+        option(value='2' selected=(weapon.rarity === '2'? 'selected':false)) 2 Star
+        option(value='1' selected=(weapon.rarity === '1'? 'selected':false)) 1 Star
+      select(name='weapon_type')
+        option(value='' hidden='') Please select a weapon type
+        each weap in weapon_types
+          option(value=weap._id selected=( weapon.weapon_type === weap._id.toString()? 'selected':false))=weap.name
+      textarea#itemDescription(name='passive' cols='30' rows='10' placeholder='Weapon passive')= (weapon === undefined? "": weapon.passive)
+      input#profileImg(type='url' name='img' placeholder='Image link (example: https://paimon.moe/images/weapons/the_catch.png)' value=(weapon === undefined? "": weapon.img))
+      if errors 
+        ul.errors 
+          each err in errors 
+            li!= err.msg
+      button.addItem(type='submit') Create weapon
