@@ -2,6 +2,8 @@ const Character = require("../models/character");
 const WeaponType = require("../models/weaponType");
 const Region = require("../models/region");
 const async = require("async");
+const {body, validationResult} = require("express-validator")
+const he = require("he");
 
 exports.character_list = (req, res, next)=>{
     let queryObj = {};
@@ -56,13 +58,75 @@ exports.character_detail = (req, res, next)=>{
     });
 };
 
-exports.character_create_get = ()=>{
-    return "NOT YET IMPLEMENTED.";
+exports.character_create_get = (req, res, next)=>{
+    async.parallel({
+        region_list(cb){
+            Region.find().exec(cb);
+        },
+        weapon_types(cb){
+            WeaponType.find().exec(cb)
+        }
+    }, (err, results)=>{
+        if(err) return next(err);
+
+        res.render("character_form", {
+            region_list: results.region_list,
+            weapon_types: results.weapon_types, 
+            character: {},
+        })
+    });
 };
 
-exports.character_create_post = ()=>{
-    return "NOT YET IMPLEMENTED.";
-};
+exports.character_create_post = [
+    body("name").trim().isLength({min: 1}).escape().withMessage("Name must be specified"),
+    body("rarity").isInt().withMessage("You must pick a rarity."),
+    body("region").isLength({min: 1}).withMessage("You must pick a region."),
+    body("element").isLength({min: 1}).withMessage("You must pick an element."),
+    body("weapon_type").isLength({min: 1}).withMessage("You must pick a weapon type."),
+    body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
+    body("img_small").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
+    body("img_full").trim().isLength({min: 1}).withMessage("Full image must be specified"),
+
+    (req, res, next)=>{
+        let errors = validationResult(req);
+        if(!errors.isEmpty()){
+            async.parallel({
+                region_list(cb){
+                    Region.find().exec(cb);
+                },
+                weapon_types(cb){
+                    WeaponType.find().exec(cb)
+                }
+            }, (err, results)=>{
+                if(err) return next(err);
+                let character = req.body;
+
+                character.img_small = he.decode(character.img_small);
+                character.img_full = he.decode(character.img_full);
+                character.description = he.decode(character.description);
+
+                res.render("character_form", {
+                    region_list: results.region_list,
+                    weapon_types: results.weapon_types, 
+                    character: character,
+                    errors: errors.array(),
+                });
+            });
+            return;
+        }
+
+        let character = new Character(req.body);
+        character.img_small = he.decode(character.img_small);
+        character.img_full = he.decode(character.img_full);
+        character.description = he.decode(character.description);
+
+        character.save((err, character)=>{
+            if(err) return next(err);
+
+            res.redirect("/character/"+character._id);
+        });
+    }
+];
 
 exports.character_delete_get = ()=>{
     return "NOT YET IMPLEMENTED.";

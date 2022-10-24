@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  section.content.margin-top-d
+    form.newItem_form.pad-d.rounded-5(action='/character/create' method="POST")
+      input#itemName(type='text' name='name' placeholder='Name' value=(character === undefined? "": character.name))
+      select#itemRarity(name='rarity')
+        option(value='' hidden='') Please select a rarity
+        option(value='5' selected=(character.rarity === '5'? 'selected':false)) 5 Star
+        option(value='4' selected=(character.rarity === '4'? 'selected':false)) 4 Star
+      select#characterRegion(name='weapon_type')
+        option(value='' hidden='') Please select a weapon
+        each weap in weapon_types
+          option(value=weap._id selected=( character.weapon_type === weap._id.toString()? 'selected':false))=weap.name
+      select#characterRegion(name='region')
+        option(value='' hidden='') Please select a region
+        each region in region_list 
+          option(value=region._id selected=( character.region === region._id.toString()? 'selected':false))=region.name
+      select#characterElement(name='element')
+        option(value='' hidden='') Please select an element
+        option(value='anemo' selected=(character.element == "anemo"? 'selected':false)) Anemo
+        option(value='geo' selected=(character.element == "geo"? 'selected':false)) Geo
+        option(value='hydro' selected=(character.element == "hydro"? 'selected':false)) Hydro
+        option(value='pyro' selected=(character.element == "pyro"? 'selected':false)) Pyro
+        option(value='cryo' selected=(character.element == "cryo"? 'selected':false)) Cryo
+        option(value='dendro' selected=(character.element == "dendro"? 'selected':false)) Dendro
+      textarea#itemDescription(name='description' cols='30' rows='10' placeholder='Description')= (character === undefined? "": character.description)
+      input#profileImg(type='url' name='img_small' placeholder='Thumbnail image link (example: https://paimon.moe/images/characters/albedo.png)' value=(character === undefined? "": character.img_small))
+      input#detailImg(type='url' name='img_full' placeholder='Detailed image link (example: https://paimon.moe/images/characters/full/albedo.png)' value=(character === undefined? "": character.img_full))
+      if errors 
+        ul.errors 
+          each err in errors 
+            li!= err.msg
+      button.addItem(type='submit') Create Character

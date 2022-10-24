@@ -176,9 +176,17 @@ header{
     flex: 1;
     display: flex;
     justify-content: center;
+
+    overflow: hidden;
 }
 
-.card_img > img{
+.img_character{
+    height: 100%;
+    align-self: center;
+    aspect-ratio: 1 / 1;
+}
+
+.img_artifact, .img_weapon{
     width: 100%;
     align-self: center;
 }
