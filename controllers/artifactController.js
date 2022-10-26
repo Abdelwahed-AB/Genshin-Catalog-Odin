@@ -64,12 +64,43 @@ exports.artifact_create_post = [
         });
     },
 ];
-exports.artifact_update_get = ()=>{
-    return "Not yet implemented.";
+exports.artifact_update_get = (req, res, next)=>{
+    Artifact.findById(req.params.id).exec((err, artifact)=>{
+        if(err) return next(err);
+        
+        res.render("artifact_form", {artifact});
+    });
 };
-exports.artifact_update_post = ()=>{
-    return "Not yet implemented.";
-};
+exports.artifact_update_post = [
+    body("name").trim().isLength({min: 1}).escape().withMessage("Name must be specified"),
+    body("rarity").isInt().withMessage("You must pick a rarity."),
+    body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
+    body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
+    (req, res, next)=>{
+        let errors = validationResult(req);
+        let artifact = req.body;
+        artifact.name = he.decode(artifact.name);
+        artifact.description = he.decode(artifact.description);
+        artifact.img = he.decode(artifact.img);
+        artifact._id = req.params.id;
+
+        if(!errors.isEmpty()){
+            res.render("artifact_form", {
+               artifact: artifact,
+               errors: errors.array(), 
+            });
+            return;
+        }
+
+        artifact = new Artifact(artifact);
+
+        Artifact.findByIdAndUpdate(req.params.id, artifact, (err, newArt)=>{
+            if(err) return next(err);
+
+            res.redirect(newArt.url);
+        });
+    },
+];
 exports.artifact_delete_get = ()=>{
     return "Not yet implemented.";
 };

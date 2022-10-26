@@ -112,9 +112,10 @@ exports.weapon_update_get = ()=>{
         },
     }, (err, results)=>{
         if(err) return next(err);
-
+        let weapon = results.weapon.toObject();
+        weapon.weapon_type = weapon.weapon_type.toString();
         res.render("weapon_form", {
-            weapon: results.weapon,
+            weapon: weapon,
             weapon_types: results.weapon_types,
         });
     });
