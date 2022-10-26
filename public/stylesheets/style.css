@@ -296,15 +296,23 @@ header{
 .newItem_form > textarea{
     resize: none;
 }
-.addItem{
+.formCtrl{
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+.formBtn{
+    flex: 1;
     background-color: var(--color-ui-main);
     color: white;
     cursor: pointer;
+    text-decoration: none;
+    text-align: center;
 
     transition: 200ms ease;
 }
 
-.addItem:hover{
+.formBtn:hover{
     background: linear-gradient(180deg, rgba(220, 192, 173,.9) 0%, rgba(220, 192, 173, .1) 100%);
 }
 

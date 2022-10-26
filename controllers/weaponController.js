@@ -4,7 +4,6 @@ const async = require("async");
 const {body, validationResult} = require("express-validator");
 const he = require("he");
 
-
 exports.weapon_list = (req, res, next)=>{
     let queryObj = {};
 
@@ -64,6 +63,7 @@ exports.weapon_create_post = [
     body("passive").trim().escape().isLength({min: 1}).withMessage("Weapon passive must be specified."),
     body("second_stat").trim().escape().isLength({min: 1}).withMessage("Secondary stat must be specified."),
     body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified."),
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
 
     (req, res, next)=>{
         let errors = validationResult(req);
@@ -72,6 +72,7 @@ exports.weapon_create_post = [
         weapon.ima = he.decode(weapon.img);
         weapon.passive = he.decode(weapon.passive);
         weapon.second_stat = he.decode(weapon.second_stat);
+        delete weapon.password;
 
         if(!errors.isEmpty()){
             WeaponType.find().exec((err, results)=>{
@@ -85,24 +86,18 @@ exports.weapon_create_post = [
 
             return;
         }
+
         weapon = new Weapon(weapon);
 
         weapon.save((err, newWeap)=>{
             if(err) return next(err);
-
             res.redirect(newWeap.url);
         });
     },
 ];
 
-exports.weapon_delete_get = ()=>{
-    return "Not yet implemented.";
-};
-exports.weapon_delete_post = ()=>{
-    return "Not yet implemented.";
-};
 
-exports.weapon_update_get = ()=>{
+exports.weapon_update_get = (req, res, next)=>{
     async.parallel({
         weapon_types(cb){
             WeaponType.find().exec(cb);
@@ -114,6 +109,7 @@ exports.weapon_update_get = ()=>{
         if(err) return next(err);
         let weapon = results.weapon.toObject();
         weapon.weapon_type = weapon.weapon_type.toString();
+        weapon.rarity = ''+weapon.rarity;
         res.render("weapon_form", {
             weapon: weapon,
             weapon_types: results.weapon_types,
@@ -129,7 +125,8 @@ exports.weapon_update_post = [
     body("passive").trim().escape().isLength({min: 1}).withMessage("Weapon passive must be specified."),
     body("second_stat").trim().escape().isLength({min: 1}).withMessage("Secondary stat must be specified."),
     body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified."),
-
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
+    
     (req, res, next)=>{
         let errors = validationResult(req);
         let weapon = req.body;
@@ -138,7 +135,7 @@ exports.weapon_update_post = [
         weapon.passive = he.decode(weapon.passive);
         weapon.second_stat = he.decode(weapon.second_stat);
         weapon._id = req.params.id;
-
+        
         if(!errors.isEmpty()){
             WeaponType.find().exec((err, results)=>{
                 if(err) return next(err);
@@ -148,15 +145,46 @@ exports.weapon_update_post = [
                     errors: errors.array(),
                 })
             });
-
+            
             return;
         }
         weapon = new Weapon(weapon);
-
+        
         Weapon.findByIdAndUpdate(req.params.id, weapon, (err, newWeap)=>{
             if(err) return next(err);
-
+            
             res.redirect(newWeap.url);
         });
     },
+];
+
+exports.weapon_delete_get = (req, res, next)=>{
+    Weapon.findById(req.params.id).exec((err, weapon)=>{
+        if(err) return next(err);
+
+        res.render("delete_item", {weapon});
+    });
+};
+exports.weapon_delete_post = [
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
+    (req, res, next)=>{
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            Weapon.findById(req.params.id).exec((err, weapon)=>{
+                if(err) return next(err);
+        
+                res.render("delete_item", {
+                    weapon: weapon,
+                    errors: errors.array()
+                });
+            });
+            return;
+        }
+
+        Weapon.findByIdAndDelete(req.params.id, (err)=>{
+            if(err) return next(err);
+            res.redirect("/weapons");
+        });
+    }
 ];

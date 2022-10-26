@@ -13,8 +13,9 @@ block content
         option(value='1' selected=(artifact.rarity === '1'? 'selected':false)) 1 Star
       textarea#itemDescription(name='description' cols='30' rows='10' placeholder='Description')= (artifact === undefined? "": artifact.description)
       input#profileImg(type='url' name='img' placeholder='Image link (example: https://paimon.moe/images/artifacts/adventurer_flower.png)' value=(artifact === undefined? "": artifact.img))
+      input#pass(type="password" name="password" placeholder="Password")
       if errors 
         ul.errors 
           each err in errors 
             li!= err.msg
-      button.addItem(type='submit') Create artifact
+      button.addItem(type='submit' class="formBtn") Create artifact

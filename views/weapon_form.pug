@@ -19,8 +19,9 @@ block content
           option(value=weap._id selected=( weapon.weapon_type === weap._id.toString()? 'selected':false))=weap.name
       textarea#itemDescription(name='passive' cols='30' rows='10' placeholder='Weapon passive')= (weapon === undefined? "": weapon.passive)
       input#profileImg(type='url' name='img' placeholder='Image link (example: https://paimon.moe/images/weapons/the_catch.png)' value=(weapon === undefined? "": weapon.img))
+      input#pass(type="password" name="password" placeholder="Password")
       if errors 
         ul.errors 
           each err in errors 
             li!= err.msg
-      button.addItem(type='submit') Create weapon
+      button.addItem(type='submit' class="formBtn") Create weapon

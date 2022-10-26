@@ -4,7 +4,6 @@ const Region = require("../models/region");
 const async = require("async");
 const {body, validationResult} = require("express-validator")
 const he = require("he");
-const character = require("../models/character");
 
 exports.character_list = (req, res, next)=>{
     let queryObj = {};
@@ -87,6 +86,7 @@ exports.character_create_post = [
     body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
     body("img_small").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
     body("img_full").trim().isLength({min: 1}).withMessage("Full image must be specified"),
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
 
     (req, res, next)=>{
         let errors = validationResult(req);
@@ -95,9 +95,9 @@ exports.character_create_post = [
         character.img_small = he.decode(character.img_small);
         character.img_full = he.decode(character.img_full);
         character.description = he.decode(character.description);
-        character.rarity = (character.rarity != '')?parseInt(character.rarity):0;
 
         if(!errors.isEmpty()){
+            console.log(req.body.password === process.env.SECRET);
             async.parallel({
                 region_list(cb){
                     Region.find().exec(cb);
@@ -164,6 +164,7 @@ exports.character_update_post = [
     body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
     body("img_small").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
     body("img_full").trim().isLength({min: 1}).withMessage("Full image must be specified"),
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
 
     (req, res, next)=>{
         let errors = validationResult(req);
@@ -205,10 +206,34 @@ exports.character_update_post = [
     }
 ];
 
-exports.character_delete_get = ()=>{
-    return "NOT YET IMPLEMENTED.";
+exports.character_delete_get = (req, res, next)=>{
+    Character.findById(req.params.id).exec((err, character)=>{
+        if(err) return next(err);
+
+        res.render("delete_item", {character});
+    });
 };
 
-exports.character_delete_post = ()=>{
-    return "NOT YET IMPLEMENTED.";
-};
+exports.character_delete_post = [
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
+    (req, res, next)=>{
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            Character.findById(req.params.id).exec((err, char)=>{
+                if(err) return next(err);
+        
+                res.render("delete_item", {
+                    character: char,
+                    errors: errors.array(),
+                });
+            });
+            return;
+        }
+
+        Character.findByIdAndDelete(req.params.id, (err)=>{
+            if(err) return next(err);
+            res.redirect("/characters");
+        });
+    }
+];

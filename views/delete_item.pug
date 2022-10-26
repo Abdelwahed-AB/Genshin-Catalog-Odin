@@ -1,0 +1,27 @@
+extends layout 
+
+block content
+  main
+  section.content.margin-top-d
+    form.newItem_form.pad-d.rounded-5(method='POST')
+      if character
+        p Are you sure you want to delete #{character.name}
+      if weapon
+        p Are you sure you want to delete #{weapon.name}
+      if artifact
+        p Are you sure you want to delete #{artifact.name}
+      input#pass(type="password" name="password" placeholder="Password")
+      if errors 
+        ul.errors 
+          each err in errors 
+            li!= err.msg
+      .formCtrl
+        button.formBtn.rounded-5.pad-s(type='submit') Delete
+        if character
+          a.formBtn.rounded-5.pad-s(href='/') Cancel
+        if weapon
+          a.formBtn.rounded-5.pad-s(href='/weapons') Cancel
+        if artifact
+          a.formBtn.rounded-5.pad-s(href='/artifacts') Cancel
+      
+        

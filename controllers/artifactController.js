@@ -40,6 +40,7 @@ exports.artifact_create_post = [
     body("rarity").isInt().withMessage("You must pick a rarity."),
     body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
     body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
     (req, res, next)=>{
         let errors = validationResult(req);
         let artifact = req.body;
@@ -67,8 +68,9 @@ exports.artifact_create_post = [
 exports.artifact_update_get = (req, res, next)=>{
     Artifact.findById(req.params.id).exec((err, artifact)=>{
         if(err) return next(err);
-        
-        res.render("artifact_form", {artifact});
+        let art = artifact.toObject();
+        art.rarity = ''+art.rarity;
+        res.render("artifact_form", {artifact:art});
     });
 };
 exports.artifact_update_post = [
@@ -76,6 +78,7 @@ exports.artifact_update_post = [
     body("rarity").isInt().withMessage("You must pick a rarity."),
     body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
     body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
     (req, res, next)=>{
         let errors = validationResult(req);
         let artifact = req.body;
@@ -101,10 +104,34 @@ exports.artifact_update_post = [
         });
     },
 ];
-exports.artifact_delete_get = ()=>{
-    return "Not yet implemented.";
+exports.artifact_delete_get = (req, res, next)=>{
+    Artifact.findById(req.params.id).exec((err, artifact)=>{
+        if(err) return next(err);
+
+        res.render("delete_item", {artifact});
+    });
 };
 
-exports.artifact_delete_post = ()=>{
-    return "Not yet implemented.";
-};
+exports.artifact_delete_post = [
+    body("password").custom(val=>val === process.env.SECRET).withMessage("Wrong password."),
+    (req, res, next)=>{
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            Artifact.findById(req.params.id).exec((err, art)=>{
+                if(err) return next(err);
+        
+                res.render("delete_item", {
+                    artifact: art,
+                    errors: errors.array(),
+                });
+            });
+            return;
+        }
+
+        Artifact.findByIdAndDelete(req.params.id, (err)=>{
+            if(err) return next(err);
+            res.redirect("/artifacts");
+        });
+    }
+];

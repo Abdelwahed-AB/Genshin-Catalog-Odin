@@ -27,8 +27,9 @@ block content
       textarea#itemDescription(name='description' cols='30' rows='10' placeholder='Description')= (character === undefined? "": character.description)
       input#profileImg(type='url' name='img_small' placeholder='Thumbnail image link (example: https://paimon.moe/images/characters/albedo.png)' value=(character === undefined? "": character.img_small))
       input#detailImg(type='url' name='img_full' placeholder='Detailed image link (example: https://paimon.moe/images/characters/full/albedo.png)' value=(character === undefined? "": character.img_full))
+      input#pass(type="password", name="password" placeholder="Password")
       if errors 
         ul.errors 
           each err in errors 
             li!= err.msg
-      button.addItem(type='submit') Create Character
+      button.addItem(type='submit' class="formBtn") Create Character
