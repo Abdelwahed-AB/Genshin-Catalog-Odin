@@ -1,4 +1,6 @@
 const Artifact = require("../models/artifact");
+const {body, validationResult} = require("express-validator");
+const he = require("he");
 
 exports.artifact_list = (req, res, next)=>{
     let queryObj = {};
@@ -29,13 +31,39 @@ exports.artifact_detail = (req, res, next)=>{
     });
 };
 
-exports.artifact_create_get = ()=>{
-    return "Not yet implemented.";
+exports.artifact_create_get = (req, res, next)=>{
+    res.render("artifact_form", {artifact: {}});
 };
 
-exports.artifact_create_post = ()=>{
-    return "Not yet implemented.";
-};
+exports.artifact_create_post = [
+    body("name").trim().isLength({min: 1}).escape().withMessage("Name must be specified"),
+    body("rarity").isInt().withMessage("You must pick a rarity."),
+    body("description").trim().escape().isLength({min: 1}).withMessage("Description must be specified"),
+    body("img").trim().isLength({min: 1}).withMessage("Thumbnail image must be specified"),
+    (req, res, next)=>{
+        let errors = validationResult(req);
+        let artifact = req.body;
+        artifact.name = he.decode(artifact.name);
+        artifact.description = he.decode(artifact.description);
+        artifact.img = he.decode(artifact.img);
+
+        if(!errors.isEmpty()){
+            res.render("artifact_form", {
+               artifact: artifact,
+               errors: errors.array(), 
+            });
+            return;
+        }
+
+        artifact = new Artifact(artifact);
+
+        artifact.save((err, newArtifact)=>{
+            if(err) return next(err);
+
+            res.redirect(newArtifact.url);
+        });
+    },
+];
 exports.artifact_update_get = ()=>{
     return "Not yet implemented.";
 };
